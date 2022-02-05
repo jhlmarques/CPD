@@ -1,9 +1,9 @@
 from typing import List, Tuple, NamedTuple, Optional
 
 # Constants
-TWO_POWER = 'two-power'
-KNUTH = 'knuth'
-CIURA = 'ciura'
+TWO_POWER = 'SHELL'
+KNUTH = 'KNUTH'
+CIURA = 'CIURA'
 
 # Gap sequence caches
 gaps_twopower: List[List[int]] = [[1]]
@@ -127,7 +127,7 @@ class ShellSortData:
             for line in file:
                 line_data = line.split(' ')
                 self.inputs.append(ShellSortInput(gap_indexes=get_gap_indexes(int(line_data[0])),
-                                                  unsorted_values=list(map(int, line_data[1:-1]))))
+                                                  unsorted_values=list(map(int, line_data[0:-1]))))
         self.next_input()
 
     def get_current_gap(self, sequence_type: str) -> Optional[List[int]]:
