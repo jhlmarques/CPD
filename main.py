@@ -1,4 +1,3 @@
-from isort import file
 from typing import List, Optional
 from shellsortinput import ShellSortData, TWO_POWER, KNUTH, CIURA
 from time import perf_counter
