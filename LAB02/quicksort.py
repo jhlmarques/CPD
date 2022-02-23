@@ -1,7 +1,7 @@
 import random
 import statistics
 import time
-from sortdata import SortData, SortInput
+from sortdata import SortData
 from typing import List, Tuple, NamedTuple
 
 # array1 = [16, 16, 14, 12, 1, 8, 4, 9, 6, 15, 13, 11, 2, 7, 3, 10, 5]
@@ -138,7 +138,8 @@ stats_hoare_random = []
 
 for i in range(0, QS_data.size):
     median_unsorted1, random_unsorted1 = QS_data.get_unsorted_input(i)
-    median_unsorted2, random_unsorted2 = median_unsorted1.copy(), random_unsorted1.copy()
+    median_unsorted2, random_unsorted2 = QS_data.get_unsorted_input(i)
+
     input_size = len(median_unsorted1)
 
     print(f"--------LINE {i}--------")

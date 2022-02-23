@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="070bd272-8284-449f-8a3b-a20419c75233" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/LAB02/entrada-quicksort.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LAB02/integrantes.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LAB02/sortdata.py" afterDir="false" />
+    <list default="true" id="070bd272-8284-449f-8a3b-a20419c75233" name="Changes" comment="Ultimos toques (?)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LAB02/quicksort.py" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/quicksort.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB02/stats-aleatorio-hoare.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-aleatorio-hoare.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB02/stats-aleatorio-lomuto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-aleatorio-lomuto.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB02/stats-mediana-hoare.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-mediana-hoare.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB02/stats-mediana-lomuto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-mediana-lomuto.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +82,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1645388750287</updated>
-      <workItem from="1645388751923" duration="11853000" />
+      <workItem from="1645388751923" duration="15330000" />
+      <workItem from="1645481645144" duration="1304000" />
+      <workItem from="1645553828165" duration="153000" />
+      <workItem from="1645592795481" duration="776000" />
+      <workItem from="1645637226175" duration="3275000" />
     </task>
     <task id="LOCAL-00001" summary="Mudança de diretório">
       <created>1645388792741</created>
@@ -104,7 +109,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645388953063</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Arquivos e etc">
+      <created>1645408072027</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1645408072027</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -113,9 +125,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Mudança de diretório" />
     <MESSAGE value="LAB 02" />
-    <option name="LAST_COMMIT_MESSAGE" value="LAB 02" />
+    <MESSAGE value="Arquivos e etc" />
+    <option name="LAST_COMMIT_MESSAGE" value="Arquivos e etc" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CPD$quicksort.coverage" NAME="quicksort Coverage Results" MODIFIED="1645407684541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LAB02" />
+    <SUITE FILE_PATH="coverage/CPD$quicksort.coverage" NAME="quicksort Coverage Results" MODIFIED="1645654131141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LAB02" />
   </component>
 </project>
