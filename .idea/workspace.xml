@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="070bd272-8284-449f-8a3b-a20419c75233" name="Changes" comment="Ultimos toques (?)">
+      <change afterPath="$PROJECT_DIR$/LAB03/frankestein_clean.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LAB03/radixsort.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LAB03/sortdata.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LAB03/war_and_peace_clean.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB02/quicksort.py" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/quicksort.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LAB02/stats-aleatorio-hoare.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-aleatorio-hoare.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LAB02/stats-aleatorio-lomuto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-aleatorio-lomuto.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LAB02/stats-mediana-hoare.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LAB02/stats-mediana-hoare.txt" afterDir="false" />
@@ -34,18 +37,20 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/LAB02" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/LAB03" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JH\PycharmProject\CPD\LAB03" />
       <recent name="C:\Users\JH\PycharmProject\CPD\LAB02" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\JH\PycharmProject\CPD" />
       <recent name="C:\Users\JH\PycharmProject\CPD\LAB02" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.radixsort">
     <configuration name="quicksort" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CPD" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -68,8 +73,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="radixsort" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="CPD" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/LAB03" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/LAB03/radixsort.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.radixsort" />
         <item itemvalue="Python.quicksort" />
       </list>
     </recent_temporary>
@@ -86,7 +114,9 @@
       <workItem from="1645481645144" duration="1304000" />
       <workItem from="1645553828165" duration="153000" />
       <workItem from="1645592795481" duration="776000" />
-      <workItem from="1645637226175" duration="3275000" />
+      <workItem from="1645637226175" duration="4667000" />
+      <workItem from="1645670693359" duration="990000" />
+      <workItem from="1647197622867" duration="3233000" />
     </task>
     <task id="LOCAL-00001" summary="Mudança de diretório">
       <created>1645388792741</created>
@@ -116,7 +146,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645408072027</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Ultimos toques (?)">
+      <created>1645655253694</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1645655253694</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,9 +163,11 @@
     <MESSAGE value="Mudança de diretório" />
     <MESSAGE value="LAB 02" />
     <MESSAGE value="Arquivos e etc" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arquivos e etc" />
+    <MESSAGE value="Ultimos toques (?)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ultimos toques (?)" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CPD$quicksort.coverage" NAME="quicksort Coverage Results" MODIFIED="1645654131141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LAB02" />
+    <SUITE FILE_PATH="coverage/CPD$radixsort.coverage" NAME="radixsort Coverage Results" MODIFIED="1647200860570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LAB03" />
+    <SUITE FILE_PATH="coverage/CPD$quicksort.coverage" NAME="quicksort Coverage Results" MODIFIED="1647198888033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LAB02" />
   </component>
 </project>
