@@ -36,15 +36,30 @@ radix_max_size1 = wap_data.get_greatest_word_length()
 frankenstein = frank_data.get_unsorted_input(0)
 radix_max_size2 = frank_data.get_greatest_word_length()
 
-'''
 
-Código do RadixSort aqui
-Não sei se vais usar, mas as variáveis radix_max_size1 e radix_max_size2
-podem servir pra saber por quantos caracteres tem que rodar o radix pra cada um
-dos arquivos
+# aux function to get the index of a letter on a range of 0 - 25
+def get_index(letter):
+    return ord(letter) - 65
 
-'''
+def radix(arr, d):
+    sorted_list = []
 
+    if(arr):
+        aux = [[] for i in range(26)]
+        for word in arr:
+            if d >= len(word):
+                sorted_list.append(word)
+            else:
+                index = get_index(word[d])
+                aux[index].append(word)
+
+        aux = [radix(position, d + 1) for position in aux]
+
+        for position in aux:
+            for word in position:
+                sorted_list.append(word)
+
+    return sorted_list
 
 # Counts how many times each word appears in the sorted list and output it to a file
 def put_in_file(sorted_list: List[str], output_file):
@@ -64,15 +79,12 @@ def put_in_file(sorted_list: List[str], output_file):
             file.write(f'{word} {word_count}\n')
             i += 1
 
+sorted_wap = radix(war_and_peace, 0)
+sorted_frank = radix(frankenstein, 0)
 
-'''
-Descomentar quando radix estiver pronto e tiver ordenado as listas
+put_in_file(sorted_wap, 'war_and_peace_ordenado.txt')
+put_in_file(sorted_frank, 'frankenstein_ordenado.txt')
 
-put_in_file(war_and_peace, 'war_and_peace_ordenado.txt')
-put_in_file(frankenstein, 'frankenstein_ordenado.txt')
-
-
-'''
 # Teste da função que põe no arquivo
 # test_sorted_input = 'ABACK ABACK ABACK ABACUS ABANDON ABANDON ABANDON ABANDON ABANDON ABANDONED ABANDONING'.split(' ')
 # print(test_sorted_input)
