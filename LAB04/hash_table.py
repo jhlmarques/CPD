@@ -12,24 +12,35 @@ with open(SEARCH_FILE, 'r') as file:
 class HashTable:
     def __init__(self, size: int):
         self.size = size
-        self.array = [[]] * size
+        self.array = [[] for i in range(self.size)]
 
     # Horner
     def hashing_function(self, input: str):
-        r_val = 0
-        for char in input:
-            r_val = (31 * r_val + char) % self.size
-        return r_val
+        p = 53;                     #53 because ther's both upper and lowecase
+        m = self.size;
+        p_pow = 1;
+        hash = 0;
+    
+        for i in range(len(input)): 
+            hash = ((hash + (ord(input[i]) - ord('a') + 1) * p_pow) % m);
+            p_pow = (p_pow * p) % m;
+ 
+        return hash
 
     # Applies the hashing function to the string to get it's position
     # in the array, then inserts it there
     def insert(self, string: str):
-        pass
+        index = self.hashing_function(string)
+        self.array[index].append(string)
 
     # Applies the hashing function to the string to get it's position
     # in the array, then checks if it's actually there
     def find(self, string: str):
-        return 1
+        hash = self.hashing_function(string)
+        if string in self.array[hash]:
+             return self.array[hash].index(string) + 1
+        else:
+            return -1
 
 
 Hash_503 = HashTable(503)
