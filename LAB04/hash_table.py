@@ -16,7 +16,7 @@ class HashTable:
 
     # Horner
     def hashing_function(self, input: str):
-        p = 53;                     #53 because ther's both upper and lowecase
+        p = 53;                     #53 because there's both upper and lowecase
         m = self.size;
         p_pow = 1;
         hash = 0;
