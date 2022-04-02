@@ -40,7 +40,7 @@ class HashTable:
         if string in self.array[hash]:
              return self.array[hash].index(string) + 1
         else:
-            return -1
+            return len(self.array[hash]) + 1
 
 
 Hash_503 = HashTable(503)

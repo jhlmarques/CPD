@@ -16,7 +16,7 @@ Anh Alann 1
 Daniela Nicky 1
 Kassius Teya 1
 Darel Mubarak 3
-Joao Comba -1
+Joao Comba 2
 Azalaya Andersen 1
 Valeska Drayke 1
 Makyla Azari 1
@@ -25,7 +25,7 @@ Edwardo Sadye 1
 Daimon Dua 2
 Ruth Macey 1
 Arie Liana 1
-Eduardo Vernier -1
+Eduardo Vernier 1
 Wills Makana 1
 Kyell Avalina 1
 Bodee Garner 3
@@ -36,7 +36,7 @@ Jalin Dajohn 1
 Julien Hanief 2
 Allen Rella 2
 Muiz Demia 1
-Juan Ipenza -1
+Juan Ipenza 3
 Charolette Avianna 2
 Italie Rigley 4
 Rowdy Iry 2
@@ -47,6 +47,6 @@ Kynnleigh Kaely 2
 Zayed Zeo 2
 Marai Farris 3
 Emmeri Raelynn 1
-Eban Nikit -1
-MEDIA 1.3
+Eban Nikit 2
+MEDIA 1.54
 MAXIMO 4
