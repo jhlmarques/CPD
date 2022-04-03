@@ -16,15 +16,15 @@ class HashTable:
 
     # Horner
     def hashing_function(self, input: str):
-        p = 53;                     #53 because there's both upper and lowecase
-        m = self.size;
-        p_pow = 1;
-        hash = 0;
-    
-        for i in range(len(input)): 
-            hash = ((hash + (ord(input[i]) - ord('a') + 1) * p_pow) % m);
-            p_pow = (p_pow * p) % m;
- 
+        p = 53  # 53 because there's both upper and lowecase
+        m = self.size
+        p_pow = 1
+        hash = 0
+
+        for i in range(len(input)):
+            hash = (hash + (ord(input[i]) - ord('a') + 1) * p_pow) % m
+            p_pow = (p_pow * p) % m
+
         return hash
 
     # Applies the hashing function to the string to get it's position
@@ -38,7 +38,7 @@ class HashTable:
     def find(self, string: str):
         hash = self.hashing_function(string)
         if string in self.array[hash]:
-             return self.array[hash].index(string) + 1
+            return self.array[hash].index(string) + 1
         else:
             return len(self.array[hash]) + 1
 
@@ -98,7 +98,6 @@ file_output_2503.append(f'MEDIA {accum_searches_2503 / search_length}\nMAXIMO {m
 file_output_5003.append(f'MEDIA {accum_searches_5003 / search_length}\nMAXIMO {max_5003}')
 file_output_7507.append(f'MEDIA {accum_searches_7507 / search_length}\nMAXIMO {max_7507}')
 
-
 # Output to file
 with open('experimento503.txt', 'w') as file:
     file.write('\n'.join(file_output_503))
@@ -111,5 +110,3 @@ with open('experimento5003.txt', 'w') as file:
 
 with open('experimento7507.txt', 'w') as file:
     file.write('\n'.join(file_output_7507))
-
-
