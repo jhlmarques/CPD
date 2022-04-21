@@ -5,10 +5,11 @@ from tkinter import ttk
 
 # Main tkinter window
 class SoccerApp(tk.Tk):
-    def __init__(self):
+    def __init__(self, searcher):
         super().__init__()
 
         # -- SEARCH HANDLING --
+        self.searcher = searcher
         self.search_handlers = {
             'Name': self.handle_search_name,
             'User': self.handle_search_user,
@@ -90,6 +91,12 @@ class SoccerApp(tk.Tk):
         # self.output_scroll = ttk.Scrollbar(self.output_frame, orient=VERTICAL, command=self.output_tree.xview())
         # self.output_scroll.grid(column=1)
 
+        # Start up messages
+        self.write_to_log(f'Built data structures from players.csv in {searcher.t_players} seconds')
+        self.write_to_log(f'Built data structures from rating.csv in {searcher.t_users} seconds')
+        self.write_to_log(f'Built data structures from tags.csv in {searcher.t_tags} seconds')
+
+
     def write_to_log(self, msg):
         self.log_textbox['state'] = NORMAL
         self.log_textbox.insert(END, msg + '\n')
@@ -106,19 +113,53 @@ class SoccerApp(tk.Tk):
         for item in self.output_tree.get_children():
             self.output_tree.delete(item)
 
+        self.output_tree.heading('col1')
+        self.output_tree.heading('col2')
+        self.output_tree.heading('col3')
+        self.output_tree.heading('col4')
+        self.output_tree.heading('col5')
+
     def handle_search_name(self):
         player_name = self.searched.get()
         if not len(player_name):
             return
 
         self.write_to_log(f'Searching for player \'{player_name}\'...')
+        self.searcher.find_by_name(player_name)
 
     def handle_search_user(self):
-        user_name = self.searched.get()
-        if not len(user_name):
+        user_id = self.searched.get()
+        if not len(user_id):
+            return
+        if not user_id.isnumeric():
+            self.write_to_log('User IDs only use numbers')
             return
 
-        self.write_to_log(f'Searching for user \'{user_name}\'...')
+
+        self.write_to_log(f'Searching for user of id \'{user_id}\'...')
+        ratings = self.searcher.find_by_user(int(user_id))
+
+        if ratings is None:
+            self.write_to_log('User ID not found')
+            return
+
+        for item in self.output_tree.get_children():
+            self.output_tree.delete(item)
+
+
+        self.output_tree.heading('col1', text='ID')
+        self.output_tree.heading('col2', text='Name')
+        self.output_tree.heading('col3', text='Global Rating')
+        self.output_tree.heading('col4', text='Count')
+        self.output_tree.heading('col5', text='Rating')
+
+        for item in ratings:
+            rating = item[0]
+            player_data = item[1]
+            self.output_tree.insert('', END, values=
+                                    (player_data.id, player_data.name,
+                                     player_data.sum_of_ratings / player_data.n_of_ratings,
+                                     player_data.n_of_ratings, rating))
 
     def handle_search_top(self):
         tag = self.searched.get()
@@ -129,6 +170,7 @@ class SoccerApp(tk.Tk):
         self.top_value.set(value)
 
         self.write_to_log(f'Searching for the top {value} players with tag {tag}...')
+        self.searcher.find_top(value, tag)
 
     def handle_search_tags(self):
         tags = self.searched.get()
@@ -138,4 +180,4 @@ class SoccerApp(tk.Tk):
         tags = tags.split(' ')
 
         self.write_to_log(f'Searching for players under tags \'{", ".join(tags)}\'...')
-
+        self.searcher.find_by_tags(tags)

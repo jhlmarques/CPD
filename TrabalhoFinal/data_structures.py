@@ -15,29 +15,44 @@ class UserData:
 
     def __init__(self, id):
         self.id = id
-        self.player_ratings = []  # 20 best rated
+        self.player_ratings = []  # 20 best ratings (sorted)
+        self.insertion_index = 0
 
-    # Try to insert a new (rating, player_ID) pair
-    def insert_rating(self, rating, player_ID):
-        if len(self.player_ratings) < 20 or \
-                (rating > self.player_ratings[-1][0] and
-                 (self.player_ratings.pop(-1) or True)):  # Taking advantage of lazy 'or' and lazy 'and'
-            # Basically: insert at the correct position; if there are > 20 it must be greater than the last
-            # element, which is then removed
-            insertion_idx = 0
-            for p_rating, _ in self.player_ratings:
-                if p_rating > rating:
-                    insertion_idx += 1
-                    continue
-                break
-            self.player_ratings.insert(insertion_idx, (rating, player_ID))  # Insert at the correct position
+    # Try to insert a new (rating, player_data) pair
+    def insert_rating(self, rating, player_data):
+        if self.insertion_index == 19:
+            return False
+
+        if len(self.player_ratings) < 20:
+            idx = self.insertion_index
+            for i in range(self.insertion_index, len(self.player_ratings)):
+                if self.player_ratings[i][0] < rating:
+                    break
+                idx += 1
+            self.player_ratings.insert(idx, (rating, player_data))
+            if rating == 5.0:
+                self.insertion_index += 1
+            return True
+        elif rating > self.player_ratings[-1][0]:
+            self.player_ratings.pop(-1)
+            idx = self.insertion_index
+            for i in range(self.insertion_index, len(self.player_ratings)):
+                if self.player_ratings[i][0] < rating:
+                    break
+                idx += 1
+            self.player_ratings.insert(idx, (rating, player_data))
+            if rating == 5.0:
+                self.insertion_index += 1
+            return True
+
+        return False
 
 
 # Fast prefix-based finding
 class Trie:
 
-    # Add a string to the Trie
-    def insert(self, string: str):
+    # Add a string to the Trie, with the last node containing the data
+    def insert(self, string: str, data):
         pass
 
 
@@ -46,27 +61,21 @@ class HashID:
 
     def __init__(self, size):
         self.size = size
-        self.table = [[]] * size
+        self.table = [[] for _ in range(size)]
 
     # Adds a key - value pair.
     def insert(self, key: int, value):
         pos = key % self.size
-        key_list = self.table[pos]
-
-
-        # Insertion sort - add new element to collision list
-        insertion_idx = 0
-        for i, _ in key_list:
-            if i < key:
-                insertion_idx += 1
-            break
-        key_list.insert(insertion_idx, (key, value))
+        self.table[pos].append((key, value))
 
     # Finds the data associated to the key
     def find(self, key):
         pos = key % self.size
         key_list = self.table[pos]
-        return
+        for item in key_list:
+            if item[0] == key:
+                return item[1]
+        return None
 
 
 # Hash table that stores String -> Data class pairs
