@@ -56,6 +56,9 @@ class Searcher:
         cache_player_id = -1
         cache_user = None
         cache_user_id = -1
+        cache_user_n_of_ratings = -1    
+        cache_user_lowest_rating = -1
+        cache_user_reached_limit = False
 
         with open(os.path.join(os.path.dirname(__file__), RATINGS_FILE), encoding='utf-8') as file:
             csvreader = csv.reader(file)
@@ -73,7 +76,13 @@ class Searcher:
                     if cache_user is None:
                         cache_user = UserData(id=user_id)
                         self.HashUsers.insert(user_id, cache_user)
-                    
+                        cache_user_n_of_ratings = 0
+                        cache_user_reached_limit = False
+                    else:
+                        cache_user_lowest_rating = cache_user.player_ratings[-1][0]
+                        cache_user_n_of_ratings = len(cache_user.player_ratings)
+                        cache_user_reached_limit = (cache_user_n_of_ratings == 20)
+
                     cache_user_id = user_id
 
                 if player_id != cache_player_id:
@@ -85,7 +94,15 @@ class Searcher:
                 cache_player.n_of_ratings += 1
 
                 # Try to add this player to the user's top 20 list
-                cache_user.insert_rating(rating, cache_player)
+                if cache_user_reached_limit:
+                    if cache_user_lowest_rating < rating:
+                        cache_user.insert_rating(rating, cache_player, True) # Remove last element and insert
+                        cache_user_lowest_rating = cache_user.player_ratings[-1][0]  # Update lowest rating
+                else:
+                    cache_user.insert_rating(rating, cache_player)  # Insert without removing any elements
+                    cache_user_lowest_rating = cache_user.player_ratings[-1][0]  # Update lowest rating
+                    cache_user_n_of_ratings += 1
+                    cache_user_reached_limit = (cache_user_n_of_ratings < 20)
 
         return time.perf_counter() - timer
 

@@ -18,33 +18,26 @@ class UserData:
         self.player_ratings = []  # 20 best ratings (sorted)
         self.insertion_index = 0
 
-    # Try to insert a new (rating, player_data) pair, keeping the order of ratings
-    # Contains duplicate code for efficiency's sake
-    def insert_rating(self, rating, player_data):
+    # Try to insert a new (rating, player_data) pair, keeping the elements in descending order with regards to their rating
+    # The following behaviours are present in order to increase efficiency:
+    # - Has no control over how many ratings can be added
+    # - Assumes that the current insertion has greater rating than the last element
+    def insert_rating(self, rating, player_data, reached_capacity=False):
 
-        # If there are < 20 ratings, add to the list
-        if len(self.player_ratings) < 20:
-            idx = self.insertion_index
-            for i in range(self.insertion_index, len(self.player_ratings)):
-                if self.player_ratings[i][0] < rating:
-                    break
-                idx += 1
-            self.player_ratings.insert(idx, (rating, player_data))
-            if rating == 5.0:
-                self.insertion_index += 1
-        elif rating > self.player_ratings[-1][0]:
+        # Remove the element with the lowest rating
+        if reached_capacity:
             self.player_ratings.pop(-1)
-            idx = self.insertion_index
-            for i in range(self.insertion_index, len(self.player_ratings)):
-                if self.player_ratings[i][0] < rating:
-                    break
-                idx += 1
-            self.player_ratings.insert(idx, (rating, player_data))
-            if rating == 5.0:   
-                self.insertion_index += 1
 
-
-
+        idx = self.insertion_index  # Skip elements with the highest possible rating
+        
+        for i in range(self.insertion_index, len(self.player_ratings)):
+            if self.player_ratings[i][0] < rating:
+                break
+            idx += 1
+        self.player_ratings.insert(idx, (rating, player_data))  # Insert while keeping descending order
+        
+        if rating == 5.0:
+            self.insertion_index += 1
 
 # Fast prefix-based finding
 class Trie:

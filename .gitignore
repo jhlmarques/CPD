@@ -1,2 +1,5 @@
-.csv
-.zip
+*.csv
+*.zip
+*.cpython
+/.idea
+*/__pycache__
