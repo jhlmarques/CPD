@@ -18,11 +18,11 @@ class UserData:
         self.player_ratings = []  # 20 best ratings (sorted)
         self.insertion_index = 0
 
-    # Try to insert a new (rating, player_data) pair
+    # Try to insert a new (rating, player_data) pair, keeping the order of ratings
+    # Contains duplicate code for efficiency's sake
     def insert_rating(self, rating, player_data):
-        if self.insertion_index == 19:
-            return False
 
+        # If there are < 20 ratings, add to the list
         if len(self.player_ratings) < 20:
             idx = self.insertion_index
             for i in range(self.insertion_index, len(self.player_ratings)):
@@ -32,7 +32,6 @@ class UserData:
             self.player_ratings.insert(idx, (rating, player_data))
             if rating == 5.0:
                 self.insertion_index += 1
-            return True
         elif rating > self.player_ratings[-1][0]:
             self.player_ratings.pop(-1)
             idx = self.insertion_index
@@ -41,11 +40,10 @@ class UserData:
                     break
                 idx += 1
             self.player_ratings.insert(idx, (rating, player_data))
-            if rating == 5.0:
+            if rating == 5.0:   
                 self.insertion_index += 1
-            return True
 
-        return False
+
 
 
 # Fast prefix-based finding
