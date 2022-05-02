@@ -40,11 +40,58 @@ class UserData:
             self.insertion_index += 1
 
 # Fast prefix-based finding
+class TrieNode:
+     
+    # Trie node class
+    def __init__(self):
+        self.children = [None]*31
+        self.is_end_of_word = False
+        self.sofifa_id = None
+ 
 class Trie:
-
-    # Add a string to the Trie, with the last node containing the data
-    def insert(self, string: str, data):
-        pass
+    def __init__(self):
+        self.root = self.get_node()
+ 
+    def get_node(self):
+        return TrieNode()
+ 
+    def ascii_to_index(self, ch):
+        if ch == ' ':
+            return 26
+        elif ch == '"':
+            return 27
+        elif ch == '-':
+            return 28
+        elif ch == '.':
+            return 29
+        elif ch == "'":
+            return 30
+        else:
+            return ord(ch) - ord('a')
+ 
+ 
+    def insert(self, player_name, sofifa_id):
+        pointer = self.root
+        player_name = player_name.lower()
+        for ch in player_name:
+            index = self.ascii_to_index(ch) 
+            # adds node if it doesn't already exists
+            if not pointer.children[index]:
+                pointer.children[index] = self.getNode()
+            pointer = pointer.children[index] 
+        pointer.is_end_of_word = True
+        pointer.sofifa_id = sofifa_id
+ 
+    def search(self, player_name):
+        pointer = self.root
+        player_name = player_name.lower()
+        for ch in player_name:
+            index = self.ascii_to_index(ch)
+            if not pointer.children[index]:
+                return False
+            pointer = pointer.children[index]
+ 
+        return pointer.is_end_of_word
 
 
 # Hash table that stores ID -> Data class pairs
@@ -71,11 +118,34 @@ class HashID:
 
 # Hash table that stores String -> Data class pairs
 class HashString:
+    def __init__(self, size: int):
+        self.size = size
+        self.array = [[] for i in range(self.size)]
 
-    # Adds a key - value pair
-    def insert(self, key: int, value):
-        pass
+    # Horner
+    def hashing_function(self, input: str):
+        p = 53  # 53 because there's both upper and lowecase
+        m = self.size
+        p_pow = 1
+        hash = 0
 
-    # Finds the data associated to the key
-    def find(self, key):
-        pass
+        for i in range(len(input)):
+            hash = (hash + (ord(input[i]) - ord('a') + 1) * p_pow) % m
+            p_pow = (p_pow * p) % m
+
+        return hash
+
+    # Applies the hashing function to the string to get it's position
+    # in the array, then inserts it there
+    def insert(self, string: str):
+        index = self.hashing_function(string)
+        self.array[index].append(string)
+
+    # Applies the hashing function to the string to get it's position
+    # in the array, then checks if it's actually there
+    def find(self, string: str):
+        hash = self.hashing_function(string)
+        if string in self.array[hash]:
+            return self.array[hash].index(string) + 1
+        else:
+            return len(self.array[hash]) + 1
