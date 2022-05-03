@@ -6,7 +6,7 @@ class PlayerData:
     name: str
     id: int
     positions: list
-    ratings: 'HashString'
+    tags: 'HashString'
     sum_of_ratings: int = 0
     n_of_ratings: int = 0
 
@@ -46,7 +46,7 @@ class TrieNode:
     def __init__(self):
         self.children = [None]*31
         self.is_end_of_word = False
-        self.sofifa_id = None
+        self.data = None
  
 class Trie:
     def __init__(self):
@@ -70,28 +70,39 @@ class Trie:
             return ord(ch) - ord('a')
  
  
-    def insert(self, player_name, sofifa_id):
+    def insert(self, player_name, data):
         pointer = self.root
         player_name = player_name.lower()
         for ch in player_name:
             index = self.ascii_to_index(ch) 
             # adds node if it doesn't already exists
             if not pointer.children[index]:
-                pointer.children[index] = self.getNode()
+                pointer.children[index] = self.get_node()
             pointer = pointer.children[index] 
         pointer.is_end_of_word = True
-        pointer.sofifa_id = sofifa_id
+        pointer.data = data
  
     def search(self, player_name):
         pointer = self.root
         player_name = player_name.lower()
+        players = []
         for ch in player_name:
             index = self.ascii_to_index(ch)
             if not pointer.children[index]:
-                return False
+                return players
             pointer = pointer.children[index]
- 
-        return pointer.is_end_of_word
+            print(pointer)
+        
+        def search_rec(param):
+            if param.data is not None:
+                print(param.data.name)
+                players.append(param.data)
+            for child in param.children:
+                if child:
+                    search_rec(child)
+
+        search_rec(pointer)
+        return players
 
 
 # Hash table that stores ID -> Data class pairs
@@ -137,15 +148,19 @@ class HashString:
 
     # Applies the hashing function to the string to get it's position
     # in the array, then inserts it there
-    def insert(self, string: str):
+    def insert(self, string: str, data: PlayerData):
         index = self.hashing_function(string)
-        self.array[index].append(string)
+        for item in self.array[index]:
+            if item[0] == string:
+                item[1].append(data)
+                return 
+        self.array[index].append((string, [data]))
 
     # Applies the hashing function to the string to get it's position
     # in the array, then checks if it's actually there
     def find(self, string: str):
         hash = self.hashing_function(string)
-        if string in self.array[hash]:
-            return self.array[hash].index(string) + 1
-        else:
-            return len(self.array[hash]) + 1
+        for item in self.array[hash]:
+            if item[0] == string:
+                return item[1]
+        return []

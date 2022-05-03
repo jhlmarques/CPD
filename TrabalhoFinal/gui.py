@@ -125,7 +125,21 @@ class SoccerApp(tk.Tk):
             return
 
         self.write_to_log(f'Searching for player \'{player_name}\'...')
-        self.searcher.find_by_name(player_name)
+        players = self.searcher.find_by_name(player_name)
+
+        self.output_tree.heading('col1', text='ID')
+        self.output_tree.heading('col2', text='Name')
+        self.output_tree.heading('col3', text='Positions')
+        self.output_tree.heading('col4', text='Rating')
+        self.output_tree.heading('col5', text='Count')
+
+        for player_data in players:
+            average = player_data.sum_of_ratings / player_data.n_of_ratings if player_data.n_of_ratings > 0 else 0
+            self.output_tree.insert('', END, values=
+                                    (player_data.id, player_data.name,
+                                     ', '.join(player_data.positions),
+                                     average,
+                                     player_data.n_of_ratings))
 
     def handle_search_user(self):
         user_id = self.searched.get()
@@ -156,9 +170,10 @@ class SoccerApp(tk.Tk):
         for item in ratings:
             rating = item[0]
             player_data = item[1]
+            average = player_data.sum_of_ratings / player_data.n_of_ratings if player_data.n_of_ratings > 0 else 0
             self.output_tree.insert('', END, values=
                                     (player_data.id, player_data.name,
-                                     player_data.sum_of_ratings / player_data.n_of_ratings,
+                                     average,
                                      player_data.n_of_ratings, rating))
 
     def handle_search_top(self):
@@ -180,4 +195,19 @@ class SoccerApp(tk.Tk):
         tags = tags.split(' ')
 
         self.write_to_log(f'Searching for players under tags \'{", ".join(tags)}\'...')
-        self.searcher.find_by_tags(tags)
+        players = self.searcher.find_by_tags(tags)
+
+        self.output_tree.heading('col1', text='ID')
+        self.output_tree.heading('col2', text='Name')
+        self.output_tree.heading('col3', text='Positions')
+        self.output_tree.heading('col4', text='Rating')
+        self.output_tree.heading('col5', text='Count')
+
+        for player_data in players:
+            average = player_data.sum_of_ratings / player_data.n_of_ratings if player_data.n_of_ratings > 0 else 0
+            self.output_tree.insert('', END, values=
+                                    (player_data.id, player_data.name,
+                                     ', '.join(player_data.positions),
+                                     average,
+                                     player_data.n_of_ratings))
+

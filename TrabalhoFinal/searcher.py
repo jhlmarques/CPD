@@ -5,11 +5,11 @@ import os
 
 HASHPLAYERS_SIZE = 1000000
 HASHUSERS_SIZE = 1000000
-#HASHPOSITIONS_SIZE =
-#HASHTAGS_SIZE =
+HASHPOSITIONS_SIZE = 100
+HASHTAGS_SIZE = 1000
 
 PLAYERS_FILE = 'players.csv'
-RATINGS_FILE = 'rating.csv'
+RATINGS_FILE = 'minirating.csv'
 TAGS_FILE = 'tags.csv'
 
 
@@ -20,8 +20,8 @@ class Searcher:
         self.TriePlayers = Trie()
         self.HashPlayers = HashID(HASHPLAYERS_SIZE)      # player_id -> player_data
         self.HashUsers = HashID(HASHUSERS_SIZE)          # user_id -> user_data
-        self.HashPositions = HashString()    # position -> list of players
-        self.HashTags = HashString()         # tag -> list of players
+        self.HashPositions = HashString(HASHPOSITIONS_SIZE)    # position -> list of players
+        self.HashTags = HashString(HASHTAGS_SIZE)         # tag -> list of players
 
         print('Building data structures...')
         self.t_players = self.build_players()
@@ -36,15 +36,15 @@ class Searcher:
             next(csvreader)
 
             for line in csvreader:
-                new_data = PlayerData(id=line[0], name=line[1], positions=line[2], ratings=HashString())
+                new_data = PlayerData(id=line[0], name=line[1], positions=line[2].split(', '), tags=HashString(1))
                 self.TriePlayers.insert(line[1], new_data)
                 self.HashPlayers.insert(int(line[0]), new_data)
-                # for position in line[2]:
-                #     players_in_position = HashPositions.find(position)
-                #     if players_in_position is None:
-                #         HashPositions.insert(position, new_data)
-                #     else:
-                #         players_in_position.append(new_data)
+                for position in line[2]:
+                    players_in_position = self.HashPositions.find(position)
+                    if players_in_position is None:
+                        self.HashPositions.insert(position, new_data)
+                    else:
+                        players_in_position.append(new_data)
         return time.perf_counter() - timer
 
     def build_users(self):
@@ -107,10 +107,22 @@ class Searcher:
         return time.perf_counter() - timer
 
     def build_tags(self):
-        return 0.0
+        timer = time.perf_counter()
+        with open(os.path.join(os.path.dirname(__file__), TAGS_FILE), encoding='utf-8') as file:
+            csvreader = csv.reader(file)
+            next(csvreader)
+
+            for line in csvreader:
+                player_id = int(line[1])
+                player_tag = line[2]
+                player_data = self.HashPlayers.find(player_id)
+                player_data.tags.insert(player_tag, 0)
+                self.HashTags.insert(player_tag, player_data)
+        return time.perf_counter() - timer
 
     def find_by_name(self, name):
-        pass
+        name = self.TriePlayers.search(name)
+        return name
 
     def find_by_user(self, user_id):
         user = self.HashUsers.find(user_id)
@@ -119,7 +131,21 @@ class Searcher:
         return user.player_ratings
 
     def find_top(self, N, tag):
-        pass
+        tops = self.HashPositions.find(tag)
+        return tops[0 : N]
 
     def find_by_tags(self, tags):
-        pass
+        tag = tags[0]
+        possible_players = self.HashTags.find(tag)
+        if len(tags) == 1:
+            found_players = possible_players
+        else:
+            found_players = []
+            for player in possible_players:
+                readable = True
+                for tag in tags[1:]:
+                    if player.tags.find(tag) is None:
+                        readable = False
+                if readable:
+                    found_players.append(player)
+        return found_players
