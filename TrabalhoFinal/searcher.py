@@ -1,3 +1,4 @@
+from re import M
 from data_structures import *
 import csv
 import time
@@ -9,7 +10,7 @@ HASHPOSITIONS_SIZE = 100
 HASHTAGS_SIZE = 1000
 
 PLAYERS_FILE = 'players.csv'
-RATINGS_FILE = 'minirating.csv'
+RATINGS_FILE = 'rating.csv'
 TAGS_FILE = 'tags.csv'
 
 
@@ -27,7 +28,8 @@ class Searcher:
         self.t_players = self.build_players()
         self.t_users = self.build_users()
         self.t_tags = self.build_tags()
-        print(f'Build time: {self.t_players + self.t_users + self.t_tags}')
+        self.t_sorts = self.build_sorts()
+        print(f'Build time: {self.t_players + self.t_users + self.t_tags + self.t_sorts}')
 
     def build_players(self):
         timer = time.perf_counter()
@@ -39,12 +41,8 @@ class Searcher:
                 new_data = PlayerData(id=line[0], name=line[1], positions=line[2].split(', '), tags=HashString(1))
                 self.TriePlayers.insert(line[1], new_data)
                 self.HashPlayers.insert(int(line[0]), new_data)
-                for position in line[2]:
-                    players_in_position = self.HashPositions.find(position)
-                    if players_in_position is None:
-                        self.HashPositions.insert(position, new_data)
-                    else:
-                        players_in_position.append(new_data)
+                for position in line[2].split(', '):
+                    self.HashPositions.insert(position, new_data)
         return time.perf_counter() - timer
 
     def build_users(self):
@@ -92,6 +90,7 @@ class Searcher:
                 # Update the player's ratings sum and count
                 cache_player.sum_of_ratings += rating
                 cache_player.n_of_ratings += 1
+                cache_player.average = cache_player.sum_of_ratings / cache_player.n_of_ratings
 
                 # Try to add this player to the user's top 20 list
                 if cache_user_reached_limit:
@@ -116,9 +115,23 @@ class Searcher:
                 player_id = int(line[1])
                 player_tag = line[2]
                 player_data = self.HashPlayers.find(player_id)
-                player_data.tags.insert(player_tag, 0)
-                self.HashTags.insert(player_tag, player_data)
+                
+                if player_data.tags.find(player_tag) is None:
+                    player_data.tags.insert(player_tag, 0)
+                    self.HashTags.insert(player_tag, player_data)
+                    
         return time.perf_counter() - timer
+
+    def build_sorts(self):
+        timer = time.perf_counter()
+        
+        # Sort the positions array
+        for col_list in self.HashPositions.array:
+            for values in col_list:
+                quickSortHoare(values[1], 0, len(values[1]) - 1)
+
+        return time.perf_counter() - timer
+
 
     def find_by_name(self, name):
         name = self.TriePlayers.search(name)
@@ -130,9 +143,20 @@ class Searcher:
             return None
         return user.player_ratings
 
-    def find_top(self, N, tag):
-        tops = self.HashPositions.find(tag)
-        return tops[0 : N]
+    def find_top(self, N, position):
+        r_list = []
+        found = 0
+        for player in reversed(self.HashPositions.find(position)):
+            if player.n_of_ratings < 1000:
+                continue
+            
+            r_list.append(player)
+            found += 1
+
+            if found == N:
+                break
+
+        return r_list
 
     def find_by_tags(self, tags):
         tag = tags[0]
@@ -146,6 +170,45 @@ class Searcher:
                 for tag in tags[1:]:
                     if player.tags.find(tag) is None:
                         readable = False
+                        break
                 if readable:
                     found_players.append(player)
         return found_players
+
+
+# chooses a random element as partitioner and moves it to start of array
+def randomPartitioner(array):
+    newArray = array.copy()
+    partitioner = random.choice(newArray)
+    newArray[newArray.index(partitioner)], newArray[0] = newArray[0], newArray[newArray.index(partitioner)]
+    return newArray
+
+# quicksort to use with Hoare's partition
+def quickSortHoare(array, start, end):
+    if (start < end):
+        q = partitionHoare(array, start, end)
+        quickSortHoare(array, start, q)
+        quickSortHoare(array, q + 1, end)
+
+
+# Hoare's partition strategy
+def partitionHoare(array, start, end):
+    pivot = array[start]
+    i = start - 1  # left index
+    j = end + 1  # right index
+
+    while (True):
+        # find element on the left that's greater than or equal to pivot
+        i += 1
+        while (array[i] < pivot):
+            i += 1
+        # find element on the right that's smaller than or equal to pivot
+        j -= 1
+        while (array[j] > pivot):
+            j -= 1
+        # return if indexes meet
+        if (i >= j):
+            return j
+
+        # swaps elements on right and left
+        array[i], array[j] = array[j], array[i]

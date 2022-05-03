@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from unidecode import unidecode
 
 @dataclass
 class PlayerData:
@@ -7,9 +7,21 @@ class PlayerData:
     id: int
     positions: list
     tags: 'HashString'
+    average: int = 0
     sum_of_ratings: int = 0
     n_of_ratings: int = 0
 
+    # Greater than
+    def __lt__(self, y: 'PlayerData'):
+        return self.average > y.average
+
+    # Less than
+    def __lt__(self, y: 'PlayerData'):
+        return self.average < y.average
+
+    # Check equality
+    def __eq__(self, y: 'PlayerData') :
+        return self.id == y.id
 
 class UserData:
 
@@ -72,7 +84,7 @@ class Trie:
  
     def insert(self, player_name, data):
         pointer = self.root
-        player_name = player_name.lower()
+        player_name = unidecode(player_name.lower())
         for ch in player_name:
             index = self.ascii_to_index(ch) 
             # adds node if it doesn't already exists
@@ -91,11 +103,9 @@ class Trie:
             if not pointer.children[index]:
                 return players
             pointer = pointer.children[index]
-            print(pointer)
         
         def search_rec(param):
             if param.data is not None:
-                print(param.data.name)
                 players.append(param.data)
             for child in param.children:
                 if child:
@@ -148,7 +158,7 @@ class HashString:
 
     # Applies the hashing function to the string to get it's position
     # in the array, then inserts it there
-    def insert(self, string: str, data: PlayerData):
+    def insert(self, string: str, data):
         index = self.hashing_function(string)
         for item in self.array[index]:
             if item[0] == string:
@@ -163,4 +173,4 @@ class HashString:
         for item in self.array[hash]:
             if item[0] == string:
                 return item[1]
-        return []
+        return None

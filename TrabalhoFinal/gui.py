@@ -1,6 +1,8 @@
 import tkinter as tk
+import re
 from tkinter import *
 from tkinter import ttk
+
 
 
 # Main tkinter window
@@ -92,9 +94,10 @@ class SoccerApp(tk.Tk):
         # self.output_scroll.grid(column=1)
 
         # Start up messages
-        self.write_to_log(f'Built data structures from players.csv in {searcher.t_players} seconds')
-        self.write_to_log(f'Built data structures from rating.csv in {searcher.t_users} seconds')
-        self.write_to_log(f'Built data structures from tags.csv in {searcher.t_tags} seconds')
+        self.write_to_log(f'Built Trie and Players Hash Table in {searcher.t_players} seconds')
+        self.write_to_log(f'Built Users Hash Table and Top 20 lists in {searcher.t_users} seconds')
+        self.write_to_log(f'Built Tag Hash Tables in {searcher.t_tags} seconds')
+        self.write_to_log(f'Sorted lists in {searcher.t_sorts}')
 
 
     def write_to_log(self, msg):
@@ -120,6 +123,11 @@ class SoccerApp(tk.Tk):
         self.output_tree.heading('col5')
 
     def handle_search_name(self):
+
+        # Clear treeview
+        for item in self.output_tree.get_children():
+            self.output_tree.delete(item)
+
         player_name = self.searched.get()
         if not len(player_name):
             return
@@ -134,14 +142,18 @@ class SoccerApp(tk.Tk):
         self.output_tree.heading('col5', text='Count')
 
         for player_data in players:
-            average = player_data.sum_of_ratings / player_data.n_of_ratings if player_data.n_of_ratings > 0 else 0
             self.output_tree.insert('', END, values=
                                     (player_data.id, player_data.name,
                                      ', '.join(player_data.positions),
-                                     average,
+                                     player_data.average,
                                      player_data.n_of_ratings))
 
     def handle_search_user(self):
+
+        # Clear treeview
+        for item in self.output_tree.get_children():
+            self.output_tree.delete(item)
+
         user_id = self.searched.get()
         if not len(user_id):
             return
@@ -170,31 +182,54 @@ class SoccerApp(tk.Tk):
         for item in ratings:
             rating = item[0]
             player_data = item[1]
-            average = player_data.sum_of_ratings / player_data.n_of_ratings if player_data.n_of_ratings > 0 else 0
             self.output_tree.insert('', END, values=
                                     (player_data.id, player_data.name,
-                                     average,
+                                     player_data.average,
                                      player_data.n_of_ratings, rating))
 
     def handle_search_top(self):
-        tag = self.searched.get()
-        if not len(tag):
+
+        # Clear treeview
+        for item in self.output_tree.get_children():
+            self.output_tree.delete(item)
+
+        position = self.searched.get()
+        if not len(position):
             return
 
         value = max(1, min(self.n_of_players, self.top_value.get()))
         self.top_value.set(value)
 
-        self.write_to_log(f'Searching for the top {value} players with tag {tag}...')
-        self.searcher.find_top(value, tag)
+        self.write_to_log(f'Searching for the top {value} players in position {position}...')
+        players = self.searcher.find_top(value, position)
+
+        self.output_tree.heading('col1', text='ID')
+        self.output_tree.heading('col2', text='Name')
+        self.output_tree.heading('col3', text='Positions')
+        self.output_tree.heading('col4', text='Rating')
+        self.output_tree.heading('col5', text='Count')
+
+        for player_data in players:
+
+            self.output_tree.insert('', END, values=
+                                    (player_data.id, player_data.name,
+                                     ', '.join(player_data.positions),
+                                     player_data.average,
+                                     player_data.n_of_ratings))
 
     def handle_search_tags(self):
-        tags = self.searched.get()
-        if not len(tags):
+
+        # Clear treeview
+        for item in self.output_tree.get_children():
+            self.output_tree.delete(item)
+
+        tags_str = self.searched.get()
+        if not len(tags_str):
             return
 
-        tags = tags.split(' ')
+        tags = re.findall('\'([a-zA-Z ()]+)\'', tags_str)
 
-        self.write_to_log(f'Searching for players under tags \'{", ".join(tags)}\'...')
+        self.write_to_log(f'Searching for players under tags {", ".join(tags)}...')
         players = self.searcher.find_by_tags(tags)
 
         self.output_tree.heading('col1', text='ID')
@@ -204,10 +239,9 @@ class SoccerApp(tk.Tk):
         self.output_tree.heading('col5', text='Count')
 
         for player_data in players:
-            average = player_data.sum_of_ratings / player_data.n_of_ratings if player_data.n_of_ratings > 0 else 0
             self.output_tree.insert('', END, values=
                                     (player_data.id, player_data.name,
                                      ', '.join(player_data.positions),
-                                     average,
+                                     player_data.average,
                                      player_data.n_of_ratings))
 
