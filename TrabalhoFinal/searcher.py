@@ -1,5 +1,6 @@
 from re import M
 from data_structures import *
+import random
 import csv
 import time
 import os
@@ -131,6 +132,7 @@ class Searcher:
         # Sort the positions array
         for col_list in self.HashPositions.array:
             for values in col_list:
+                randomPartitioner(values[1])
                 quickSortHoare(values[1], 0, len(values[1]) - 1)
 
         return time.perf_counter() - timer
@@ -189,10 +191,8 @@ class Searcher:
 
 # chooses a random element as partitioner and moves it to start of array
 def randomPartitioner(array):
-    newArray = array.copy()
-    partitioner = random.choice(newArray)
-    newArray[newArray.index(partitioner)], newArray[0] = newArray[0], newArray[newArray.index(partitioner)]
-    return newArray
+    partitioner = random.choice(array)
+    array[array.index(partitioner)], array[0] = array[0], array[array.index(partitioner)]
 
 # quicksort to use with Hoare's partition
 def quickSortHoare(array, start, end):

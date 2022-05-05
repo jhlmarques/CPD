@@ -12,7 +12,7 @@ class PlayerData:
     n_of_ratings: int = 0
 
     # Greater than
-    def __lt__(self, y: 'PlayerData'):
+    def __gt__(self, y: 'PlayerData'):
         return self.average > y.average
 
     # Less than
