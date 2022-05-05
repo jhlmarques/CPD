@@ -99,6 +99,8 @@ class Trie:
         player_name = player_name.lower()
         players = []
         for ch in player_name:
+            if not ch in ["'", '.', '-', '"', ' '] and not ch.isalpha():
+                return []
             index = self.ascii_to_index(ch)
             if not pointer.children[index]:
                 return players

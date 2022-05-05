@@ -18,6 +18,8 @@ class Searcher:
 
     def __init__(self):
 
+        self.n_of_players = 0
+
         self.TriePlayers = Trie()
         self.HashPlayers = HashID(HASHPLAYERS_SIZE)      # player_id -> player_data
         self.HashUsers = HashID(HASHUSERS_SIZE)          # user_id -> user_data
@@ -38,6 +40,7 @@ class Searcher:
             next(csvreader)
 
             for line in csvreader:
+                self.n_of_players += 1
                 new_data = PlayerData(id=line[0], name=line[1], positions=line[2].split(', '), tags=HashString(1))
                 self.TriePlayers.insert(line[1], new_data)
                 self.HashPlayers.insert(int(line[0]), new_data)
@@ -146,7 +149,11 @@ class Searcher:
     def find_top(self, N, position):
         r_list = []
         found = 0
-        for player in reversed(self.HashPositions.find(position)):
+        players_ordered = self.HashPositions.find(position)
+        if players_ordered is None:
+            return []
+
+        for player in reversed(players_ordered):
             if player.n_of_ratings < 1000:
                 continue
             
@@ -161,6 +168,10 @@ class Searcher:
     def find_by_tags(self, tags):
         tag = tags[0]
         possible_players = self.HashTags.find(tag)
+
+        if possible_players is None:
+            return []
+
         if len(tags) == 1:
             found_players = possible_players
         else:

@@ -1,5 +1,6 @@
 import tkinter as tk
 import re
+from unidecode import unidecode
 from tkinter import *
 from tkinter import ttk
 
@@ -18,7 +19,6 @@ class SoccerApp(tk.Tk):
             'Top': self.handle_search_top,
             'Tags': self.handle_search_tags
         }
-        self.n_of_players = 1000
 
         # -- WINDOW SETUP --
 
@@ -71,7 +71,7 @@ class SoccerApp(tk.Tk):
         self.searchtype_box.grid(column=0, row=1, padx=2)
         self.searchtype_box['values'] = tuple(self.search_handlers.keys())
         self.searchtype_box.bind('<<ComboboxSelected>>', self.set_search_type)
-        self.searchtype_spinbox = ttk.Spinbox(self.searchtype_frame, from_=1, to=self.n_of_players,
+        self.searchtype_spinbox = ttk.Spinbox(self.searchtype_frame, from_=1, to=self.searcher.n_of_players,
                                               textvariable=self.top_value)
         self.searchtype_spinbox.grid(column=1, row=1)
 
@@ -131,6 +131,8 @@ class SoccerApp(tk.Tk):
         player_name = self.searched.get()
         if not len(player_name):
             return
+
+        player_name = unidecode(player_name)
 
         self.write_to_log(f'Searching for player \'{player_name}\'...')
         players = self.searcher.find_by_name(player_name)
@@ -197,11 +199,15 @@ class SoccerApp(tk.Tk):
         if not len(position):
             return
 
-        value = max(1, min(self.n_of_players, self.top_value.get()))
+        value = max(1, min(self.searcher.n_of_players, self.top_value.get()))
         self.top_value.set(value)
 
         self.write_to_log(f'Searching for the top {value} players in position {position}...')
         players = self.searcher.find_top(value, position)
+
+        if not len(players):
+            self.write_to_log('No players found under this position with >= 1000 ratings')
+            return            
 
         self.output_tree.heading('col1', text='ID')
         self.output_tree.heading('col2', text='Name')
@@ -224,13 +230,17 @@ class SoccerApp(tk.Tk):
             self.output_tree.delete(item)
 
         tags_str = self.searched.get()
-        if not len(tags_str):
+        tags = re.findall('\'([^\']+)\'', tags_str)
+        
+        if not len(tags):
             return
-
-        tags = re.findall('\'([a-zA-Z ()]+)\'', tags_str)
 
         self.write_to_log(f'Searching for players under tags {", ".join(tags)}...')
         players = self.searcher.find_by_tags(tags)
+
+        if not len(players):
+            self.write_to_log('No users found under the specified tags')
+            return
 
         self.output_tree.heading('col1', text='ID')
         self.output_tree.heading('col2', text='Name')
